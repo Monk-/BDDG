@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Polyomino tilings</title>
+
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2 style="color:#B2DFDB">Geometric and algebraic properties of polyomino tilings</h2>
+					<br>
+					<p>by Michael Robert Korn (Chapter 3-4)</p>
+
+				</section>
+				<section>
+					<section>
+						<h2>Previously on Polyomino Tilings</h2>
+						<ul>
+							<li>Polyomino – każdy kształt stworzony przez połączenie pewnej ilości komórek ze sobą.</li>
+							<li>Wymagamy żeby komórki były połączone krawędziami, a nie tylko w kątach. </li>
+							<li>Polyomino mogą mieć „dziury”.</li>
+						</ul>
+						<img data-src="1.png" class="centerImage">
+					</section>
+					<section style="font-size:50px">
+						<h2>Typy polyomino</h2>
+						<ul>
+							<li>Wolne<a href="" style="color:#B2DFDB">(Free)</a> polyomino mogą być obracane i odzwierciedlane</li>
+							<li>Jednostronne<a href="" style="color:#B2DFDB">(One-sided)</a> polyomino mogą być tylko obracane</li>
+							<li>Stałe<a href="" style="color:#B2DFDB">(Fixed)</a> polyomino są stałe</li>
+						</ul>
+						<br>
+					</section>
+					<section style="font-size:50px">
+						<h2>Lokalny ruch<a href="" style="color:#B2DFDB">(Local move)</a></h2>
+						<ul>
+							<li>Lokalny ruch to operacja przeksztalcająca jedno kafelkowanie(pokrycie) w inne.</li>
+						</ul>
+						<blockquote>&ldquo;Essentially, a local move consists of "picking up" some number of tiles
+							from a tiling then placing new tiles to fill that space in a different way&rdquo;</blockquote>
+						<img data-src="2.png" class="centerImage">
+						<br>
+					</section>
+					<section style="font-size:45px">
+						<h2 style="font-size:62px">Lokalna łączność<a href="" style="color:#B2DFDB">(Local connectivity)</a></h2>
+						<ul>
+							<li>Niech <a style="color:#DCE775">T</a>
+								będzie zbiorem kafelków. </li>
+							<li>Niech <a style="color:#DCE775">L</a>
+								będzie skończonym zbiorem dozwolonych lokalnych ruchów dla tego zbioru kafelków. </li>
+							<li>Więc <a  style="color:#DCE775">L</a> to zbiór
+								małych regionów które możemy pokryć na co najmniej 2 sposoby.</li>
+							<li> Niech <a style="color:#DCE775">&Gamma;</a>
+								będzie dowolnym kafelkowalnym regionem.</li>
+							<li>Definiujemy graph lokalnych ruchów dla <a  style="color:#DCE775">(T, L, &Gamma;)</a>
+								umieszczając wierzcholek dla każego pokrycia <a style="color:#DCE775">&Gamma;</a>
+								i umiejscowiając krawędź  pomiędzy dwoma wierzchołkami jeśli odpowiednie pokrycia
+								są powiązane lokalnym ruchem który należy do <a style="color:#DCE775">L</a>.</li>
+						</ul>
+					</section>
+
+				</section>
+				<!-- Example of nested vertical slides -->
+
+					<section style="font-size:45px">
+						<h2 style="font-size:60px">Kafelkowe niezmienniki<a href="" style="color:#B2DFDB">(Tile invariant)</a></h2>
+						<br>
+						<ul>
+							<li>Niech <a href="" style="color:#DCE775">T</a> będzie zbiorem
+								<a href="" style="color:#DCE775">n</a> polyomino kafelków. Oznaczymy je
+								<a href="" style="color:#DCE775">t1,....,tn</a>.</li>
+							<li>Niech <a href="" style="color:#DCE775">R</a>
+								będzie zbiorem
+								<a href="" style="color:#DCE775">N</a> regionów i niech
+								<a href="" style="color:#DCE775">&Gamma;</a> będzie regionem w
+								<a href="" style="color:#DCE775">R</a> i niech
+								<a href="" style="color:#DCE775">τ</a> będzie kafelkowaniem tego regionu.</li>
+							<li>Zdefiniujmy <a href="" style="color:#DCE775">Ai(t)</a> jako ilość wystąpień kafelka
+								<a href="" style="color:#DCE775">ti</a> w kafelkowaniu
+								<a href="" style="color:#DCE775">&tau;</a>.</li>
+							<li>Kafelkowy niezmiennik to funkcja liniowa <a href="" style="color:#DCE775">Ai(t)</a>
+								wartości której zależą tylko od regionu <a href="" style="color:#DCE775">&Gamma;</a>, a nie od pokrycia tego regionu. </li>
+							<li>Przykład : typowym kafelkowym niezmiennikiem może być równanie <a href="" style="color:#DCE775">A1(&tau;) + 2*A3(&tau;) = stała (mod 5)</a></li>
+						</ul>
+						<br>
+					</section>
+
+
+
+				<section >
+					<h2>Zbiór kafelkowych niezmienników<a href="" style="color:#B2DFDB">(Tile counting group)</a></h2>
+					<ul>
+						<li>Niech <a href="" style="color:#DCE775">Z(T)</a>
+							oznacza grupę wszystkich liniowych kombinacji elementów <a href="" style="color:#DCE775">T</a>.
+							Teraz rozważmy wszystkie relacje typu<br/>
+							<a href="" class="navigate-left" style="color:#DCE775">A1(&tau;1)*t1 + A2(&tau;1)*t2+ An(&tau;1)*tn = A1(&tau;2)*t1 + A2(&tau;2)*t2+ An(&tau;2)*tn</a>
+							<br/> gdzie <a href="" style="color:#DCE775">&Gamma;</a>
+							dowolny region w <a href="" style="color:#DCE775">R</a>,
+							a <a href="" style="color:#DCE775">&tau;1</a>
+							i <a href="" style="color:#DCE775">&tau;2</a> dwa dowolne kafelkowania tego regionu.
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Lemma 3.1  Jeśli <a href="" style="color:#DCE775">R</a>
+						jest zbiorem wszystkich regionów, wszystkich simply-connected regionów albo wszystkich prostokątów wtedy zbiór
+						<a href="" style="color:#DCE775">&Lambda;T,R</a> jest integralną siatką(integral lattice).</h3>
+					<img data-src="3.png" class="centerImage">
+					<img data-src="4.png" class="centerImage">
+				</section>
+
+				<section style="font-size:50px">
+					<h2><a href="" style="color:#B2DFDB">Udowodnienie kafelkowych niezmienników</a></h2>
+					<p>
+						Istnieje 3 podstawowe techniki udowadniania
+					</p>
+					<ul>
+						<li>Kolorowanie</li>
+						<li>Argumenty brzegowe wyrazu</li>
+						<li>Przez lokalną łączność</li>
+					</ul>
+				</section>
+
+				<section style="font-size:50px">
+					<h2><a href="" style="color:#B2DFDB">Kolorowanie</a></h2>
+					<img data-src="5.png" class="centerImage">
+				</section>
+
+				<section style="font-size:50px">
+					<h2><a href="" style="color:#B2DFDB">Argumenty brzegowe wyrazu</a></h2>
+					<p>Idea to przypisać
+						litery do skierowanych krawędzi pół i rozpatrywać słowa otrzymane po przechodzeniu po granicy
+						simply connected regionu. W ich pracy poziome krawędzie to <a href="" style="color:#DCE775">A</a> i są skierowane na wchód,
+						a pionowe to <a href="" style="color:#DCE775">B</a> i są skierowane na północ. Potem żęby otrzymać słowo
+						z granicy regionu zacznij
+						z dowolnego punktu  granicy <a href="" style="color:#DCE775">&Gamma;</a> i poruszaj się przeciwnie do wskazówek zegara. Każda krawędź
+						która przechodzimy zgodnie z wskazówką strzałki zapisz jej literę, a jeśłi przeciwnie to zapisz tą literę odwrotnie.</p>
+				</section>
+
+				<section>
+					<h2><a href="" style="color:#B2DFDB">Lokalna lącznośc</a></h2>
+					<p>Trzeci sposób wykorzystuje lokalną lączność. Jeśłi istnieje lokalny
+						ruch z <a href="" style="color:#DCE775">T</a> i
+						<a href="" style="color:#DCE775">R</a> wtedy istnieje pewny zbiór lokalnych ruchów
+						<a href="" style="color:#DCE775">L</a> takiech że oni mogą przeksztalcic każde kafelkowanie w
+						każde inne. Zostaje tylko pokazać  że kafelkowy niezmiennik zostaje dla każdego z lokalnych ruchów.</p>
+				</section>
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="slide">
+					<section>
+					<h2><a href="" style="color:#B2DFDB">Domino</a></h2>
+
+					<img data-src="6.png" class="centerImage">
+					<p>Mamy <a href="" style="color:#DCE775">C</a> pół, chcemy pokryć to wszystko dominami.
+						Jeśli możemy pokryć ten region to
+						ilość wykorzystanych domin zawsze będzie <a style="color:#DCE775">C/2</a>.
+						Więć mamy kafelkowy niezmiennik <a href="" style="color:#DCE775">a1(&tau;1) + a2(&tau;2) = C/2</a>
+						co jest zawsze prawdą niezależnie od tego jakie mamy pokrycie.</p>
+					</section>
+					<section>
+						<h2><a href="" style="color:#B2DFDB">Domino</a></h2>
+						<img data-src="7.png" class="centerImage">
+						<p>Możemy rozpatrzeć następne kolorowanie.
+							Niech <a style="color:#DCE775">d</a> będzie
+							sumą wartości wszystkich pół <a style="color:#DCE775">&Gamma; mod 2</a>.
+							Pionowe domino zawsze ma wartość <a style="color:#DCE775">0 mod 2</a>
+							, a poziome zawsze ma wartość <a style="color:#DCE775">1 mod 2</a>.
+							Więc, <a style="color:#DCE775">a1(&tau;) = d mod 2</a>a i
+							<a style="color:#DCE775">a1(&tau;)</a> jest niezmiennikiem
+							<a style="color:#DCE775">mod 2</a>.</p>
+					</section>
+					<section>
+						<h2><a href="" style="color:#B2DFDB">Domino</a></h2>
+						<img data-src="8.png" class="centerImage">
+						<p>Możemy rozpatrzyć następne kolorowanie.
+							Spróbujemy pokazać żę nie istnieje kafelkowań które nie
+							są takie jak pokazaliśmy.
+							Zdefiniujemy <a style="color:#DCE775">b1(&tau;) =
+								a1(&tau;) + a2(&tau;)</a> i
+							<a style="color:#DCE775">b2(&tau;) = a1(&tau;)</a>.
+							Już pokazaliśmy że <a style="color:#DCE775">b1(&tau;)</a>
+							jest niezmiennikiem , a <a style="color:#DCE775">b2(&tau;)</a>
+							jest niezmiennikiem <a style="color:#DCE775">mod 2</a>.
+							Więc każdy element w integralnej siatce
+							musi być w formie <a style="color:#DCE775">(0,2c)</a> w
+							bazie b.
+							Żeby pokazać że to są najlepsze możliwe niezmienniki
+							skonstruujemy region <a style="color:#DCE775">&Gamma;</a>
+							taki że dla kafelkowan <a style="color:#DCE775">&tau;1</a> i
+							<a style="color:#DCE775">&tau;2</a> ,
+							takie że <a style="color:#DCE775">b2(&tau;1)</a> i
+							<a style="color:#DCE775">b2(&tau;2)</a> różnią się
+							dokładnie o <a style="color:#DCE775">2</a>
+							. To udowodni żę
+							b-wektor <a style="color:#DCE775">(0,2)</a>
+							należy do integralnej siatki
+							<a style="color:#DCE775">&Lambda;T,R</a> i z tego
+							wynika że całkowicie zdefiniowaliśmy integralną siatkę</p>
+					</section>
+				</section>
+
+				<section style="font-size:50px" data-transition="slide" data-background="#6D4C41" data-background-transition="slide">
+					<section>
+						<h2><a style="color:#B2DFDB">T-tetrominoes</a></h2>
+						<img data-src="9.png" class="centerImage">
+						<p>Zdefiniujmy naszą bazę</p>
+						<img data-src="10.png" class="centerImage">
+					</section>
+					<section style="font-size:40px">
+						<h2><a style="color:#B2DFDB">T-tetrominoes</a></h2>
+						<p><b>Twierdzenie 3.2</b> Mówimy że b1(&tau;) jest niezmiennikiem (mod &infin;), b2(&tau;) jest niezmiennikiem mod 4 i b3(&tau;) jest niezmiennikiem mod 4.</p>
+						<img data-src="11.png" class="centerImage">
+						<p>Dla każdego tetromino
+							<a style="color:#DCE775">t1</a>
+							lub <a style="color:#DCE775">t2</a>
+							umieszczonego w tym regionie suma
+							którą ono będzie pokrywać jest
+							równa
+							<a style="color:#DCE775">8 mod 32</a>
+							, kiedy każde tetromino
+							<a style="color:#DCE775">t3</a> lub
+							<a style="color:#DCE775">t4</a>
+							jest równe
+							<a style="color:#DCE775">0 mod 32</a>
+							. Więc suma wszystkich
+							pól w
+							<a style="color:#DCE775">&Gamma;</a>
+							jest równa
+							<a style="color:#DCE775">8*b2(&tau;) mod 32</a>, więc <a style="color:#DCE775">b2(&tau;)</a>
+							jest niezmiennikiem <a style="color:#DCE775">mod 4</a>. Dla
+							<a style="color:#DCE775">b3(&tau;)</a> możemy udowodnić to tak samo obracając region.</p>
+					</section>
+				</section>
+                <section>
+                    <section style="font-size:50px">
+                        <h2><a style="color:#B2DFDB">T-tetrominoes</a></h2>
+                        <img data-src="12.png" class="centerImage">
+                        <p>
+                            Dwa naturalne lokalne ruchy T-tetromino nazywamy 2-ruchem i 4-ruchem
+                        </p>
+
+                    </section>
+                    <section style="font-size:38px">
+                        <img data-src="13.png" class="centerImage">
+                        <p>
+                            Nich punkt typu A którego współrzędne są kongruentne <a style="color:#DCE775">mod 4</a>
+                            do <a style="color:#DCE775">(0,0)</a> lub
+                            <a style="color:#DCE775">(2,2)</a> i niech punkt typu B którego współrzędne są kongruentne
+                            <a style="color:#DCE775">mod 4</a>
+                            do <a style="color:#DCE775">(0,0)</a> lub
+                            <a style="color:#DCE775">(2,2)</a>.
+                        </p>
+                        <blockquote>
+                            &ldquo;Twierdzenie 4.2 Jeśli prostokąt n * m może być pokryty T- tetromino
+                            wtedy i m i n są podzielne przez 4.
+                            Ponadto, wszystkie segmenty dotykające punktów typu-A są cięciami,
+                            a wszystkie punkty typu-B są bezróżne.&rdquo;
+                        </blockquote>
+                    </section>
+                    <section style="font-size:38px">
+                        <h2><a style="color:#B2DFDB">T-tetrominoes</a></h2>
+                        <img data-src="14.png" class="centerImage">
+                        <p>
+                            Zdefiniujemy antyblok jako kwadrat 2x2 kąty którego mają parzyste współrzędne. Pokolorujemy
+                            antybloki białym i szarym, tak że antybloki w centrum których jest punkt typu A są szare
+                            i w centrum których jest punkt typu B będą białe.
+                        </p>
+                        <blockquote>
+                            &ldquo;Twierdzenie 4.3 Dla każdego 4m x 4n prostokąta Г ilość grafów łańcuchowych  jest równa ilości kafelkowań. &rdquo;
+                        </blockquote>
+                    </section>
+                </section>
+                <section>
+                    <section  style="font-size:40px">
+                        <h2><a style="color:#B2DFDB">Funkcje wysokości</a></h2>
+                        <p>
+                            Nazwijmy punkt współrzędne którego są kongruentne <a style="color:#DCE775">mod 4</a> do
+                            <a style="color:#DCE775">(0,0)</a>   punktem typu <a style="color:#DCE775">A0</a>.
+                            Podobnie, punkt kongruentny do <a style="color:#DCE775">(2,2)</a>
+                            będziemy nazywać punktem typu <a style="color:#DCE775">A1</a>
+                            (punkty kongruentne do <a style="color:#DCE775">(0,2)</a> lub
+                            <a style="color:#DCE775">(2,0)</a> bez zmian będziemy nazywać punktami typu B).
+                            Dla <a style="color:#DCE775">4m x 4n</a> prostokąta
+                            <a style="color:#DCE775">Г</a> niech
+                            <a style="color:#DCE775">Wг</a> będzie zbiorem
+                            punktów w <a style="color:#DCE775">Г</a> które mają nieparzyste współrzędne.
+                            Niech <a style="color:#DCE775">&delta; &Gamma;</a>
+                            oznacza zbiór punktów granicznych <a style="color:#DCE775">&Gamma;</a> Mówymi
+                            że funkcja <a style="color:#DCE775">f:Wг → Z</a> jest funkcją
+                            wysokości jeśli:
+                            <ol>
+                            <li><a style="color:#DCE775">f(x) = 0</a> dla wszystkich
+                                <a style="color:#DCE775">x є &delta; &Gamma;.</li>
+                            <li><a style="color:#DCE775">f(x)</a>
+                            jest parzystą liczbą dla wszystkich punktów typu <a style="color:#DCE775">A0</a></li>
+                            <li><a style="color:#DCE775">f(x)</a>
+                            jest nieparzystą liczbą dla wszystkich punktów typu <a style="color:#DCE775">A1</a></li>
+                            <li><a style="color:#DCE775">|f(x) – f(y)| <= 1</a> kiedy
+                            <a style="color:#DCE775">x</a> i
+                            <a style="color:#DCE775">y</a> sąsiadują ze sobą(na odleglości 2 jednostek)</li>
+                            </ol>
+                            Niech <a style="color:#DCE775">&Eta;&gamma;</a> oznacza zbiór wszystkich funkcji wysokości w regionie
+                            <a style="color:#DCE775">&Gamma;</a>.
+                        </p>
+                    </section>
+                    <section>
+                        <h2><a style="color:#B2DFDB">Funkcje wysokości</a></h2>
+                        <img data-src="15.png" class="centerImage">
+                        <blockquote style="font-size:35px">&ldquo;Twierdz 4.4 Dla każdego prostokątu <a style="color:#DCE775">&Gamma;</a> mamy
+                            <a style="color:#DCE775">|&Eta;&gamma;| = |&Upsilon;&gamma;| </a>&rdquo;</blockquote>
+                        <p>Definiujemy <a style="color:#DCE775">&psi;: C&gamma; → &Eta;&gamma;</a> następująco.
+                            Niech <a style="color:#DCE775">C є C&gamma;</a> będzie gafem łańcuchowym.
+                            Zdefiniujemy funkcę <a style="color:#DCE775">f0</a> na powierzchni <a style="color:#DCE775">C</a> następującymi regulami.
+                            <a style="color:#DCE775">f0</a> ma wartość
+                            <a style="color:#DCE775">0</a>
+                            na „bezgranicznej”(unbounded) powierzchni <a style="color:#DCE775">C</a>. Jeśli kwarędź grafu wskazuje na
+                            prawo to zwiększamy wartość <a style="color:#DCE775">f0</a>
+                            o <a style="color:#DCE775">1</a>.(jeśli lewo to
+                            <a style="color:#DCE775">-1)</a>. Teraz zdefiniujemy
+                            <a style="color:#DCE775">f: W&gamma; → Z</a> pozwalając
+                            <a style="color:#DCE775">f(x)</a> być równym wartośći
+                            <a style="color:#DCE775">f0</a> na powierzchni na której leży
+                            <a style="color:#DCE775">x</a>. </p>
+                    </section>
+                </section>
+				<section>
+					<section id="fragments">
+						<h2>Fragments</h2>
+						<p>Hit the next arrow...</p>
+						<p class="fragment">... to step through ...</p>
+						<p><span class="fragment">... a</span> <span class="fragment">fragmented</span> <span class="fragment">slide.</span></p>
+
+						<aside class="notes">
+							This slide has fragments which are also stepped through in the notes window.
+						</aside>
+					</section>
+				</section>
+
+
+
+				<section>
+					<h2>Marvelous List</h2>
+					<ul>
+						<li>No order here</li>
+						<li>Or here</li>
+						<li>Or here</li>
+						<li>Or here</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Fantastic Ordered List</h2>
+					<ol>
+						<li>One is smaller than...</li>
+						<li>Two is smaller than...</li>
+						<li>Three!</li>
+					</ol>
+				</section>
+
+
+
+				<section>
+					<h2>Clever Quotes</h2>
+					<p>
+						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+						&ldquo;The nice thing about standards is that there are so many to choose from&rdquo;</q> and block:
+					</p>
+					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+						&ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
+						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
+					</blockquote>
+				</section>
+
+
+
+				<section>
+					<h2>Export to PDF</h2>
+					<p>Presentations can be <a href="https://github.com/hakimel/reveal.js#pdf-export">exported to PDF</a>, here's an example:</p>
+					<iframe src="https://www.slideshare.net/slideshow/embed_code/42840540" width="445" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+				</section>
+
+
+
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				slideNumber: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+
+				// The "normal" size of the presentation, aspect ratio will be preserved
+				// when the presentation is scaled to fit different resolutions. Can be
+				// specified using percentage units.
+				width: 1200,
+				height: 900,
+
+				// Factor of the display size that should remain empty around the content
+				margin: 0.1,
+
+				// Bounds for smallest/largest possible scale to apply to content
+				minScale: 0.5,
+				maxScale: 1.5,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
