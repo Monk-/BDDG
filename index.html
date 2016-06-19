@@ -308,6 +308,66 @@
 				</section>
 
 				<section>
+				<h2><a style="color:#95cde7">Podsumowanie</a></h2>
+					<h3>Benefity</h3>
+					<ul>
+						<li>Odzyskiwanie danych po awarii, ochrona danych i wysoka dostępność</li>
+						<!--
+						Data Guard dostarcza efektywne i dołębne odzyskiwaniedanych po awarii z rozwiązaniami wysoko dostępnymi.
+						łatwe do zarządzania 'switchover' i 'failover' możliwości pozwalające odwracanie ról
+						pomiedzy główną a zapasową bazą danych,
+						minimalizując czas przestoju głównej bazy dla plannowanych i nieplannowanych przerw.
+						-->
+						<li>Kompletna ochrona danych</li>
+						<!--
+						Data Guard can ensure no data loss, even in the face of unforeseen disasters.
+						A standby database provides a safeguard against data corruption and user errors.
+						Storage level physical corruptions on the primary database do not propagate to the standby database.
+						Similarly, logical corruptions or user errors that cause the primary database to be permanently
+						damaged can be resolved.
+						Finally, the redo data is validated when it is applied to the standby database.
+						-->
+						<li>Wydajne użycie systemowych zasobów</li>
+						<!--
+						The standby database tables that are updated with redo data received from the primary database
+						can be used for other tasks such as backups, reporting, summations, and queries,
+						thereby reducing the primary database workload necessary to perform these tasks, saving
+						valuable CPU and I/O cycles. With a logical standby database, users can perform normal data
+						manipulation on tables in schemas that are not updated from the primary database.
+						A logical standby database can remain open while the tables are updated from the primary database,
+						and the tables are simultaneously available for read-only access. Finally, additional indexes
+						and materialized views
+						can be created on the maintained tables for better query performance and to suit specific business requirements.
+						-->
+						<li>Elastycznosc w ochronie danych w równowadze między dostępnością przeciwko wymaganiami wydajnościowymi.</li>
+						<!--
+						Oracle Data Guard offers maximum protection, maximum availability, and maximum performance modes to
+						help enterprises balance data availability against system performance requirements.
+						-->
+						<li>Automatyczne wykrywanie usterek i ich usuwanie</li>
+						<!--If connectivity is lost between the primary and one or more standby databases
+						(for example, due to network problems), redo data being generated on
+						the primary database cannot be sent to those standby databases.
+						Once a connection is reestablished, the missing archived redo log files (referred to as a gap)
+						are automatically detected by Data Guard, which then automatically transmits
+						the missing archived redo log files to the standby databases.
+						The standby databases are synchronized with the primary database, without manual intervention by the DBA.-->
+						<li>Scentralizowane i proste zarządzanie</li>
+						<!--The Data Guard broker provides a graphical user interface and a command-line
+						interface to automate management and operational tasks across multiple databases in a Data Guard configuration.
+						The broker also monitors all of the systems within a single Data Guard configuration.-->
+						<li>Integracja z Oracle Database</li>
+						<!--Data Guard is a feature of Oracle Database Enterprise Edition and does not require separate installation.-->
+						<li>Automatyczna zmiana ról</li>
+						<!--When fast-start failover is enabled, the Data Guard broker automatically fails over to a synchronized
+						standby site in the event of a disaster at the primary site,
+						requiring no intervention by the DBA. In addition, applications
+						are automatically notified of the role transition.-->
+					</ul>
+				</section>
+
+
+				<section>
 					<h1><a style="color:#95cde7">Dziękujemy za uwagę</a></h1>
 				</section>
 
