@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Polyomino tilings</title>
+		<title>Oracle Data Guard</title>
 
 		<meta name="author" content="Hakim El Hattab">
 
@@ -42,14 +42,15 @@
 				<section>
 					<h1>Oracle Data Guard</h1>
 					<br>
-
+					<h3 style="color:#B2DFDB">Authors: Klaudia Olejniczak, Oleksandr Kuzhel</h3>
 				</section>
 
 				<section style="font-size:45px">
 					<h2 style="color:#B2DFDB">Oracle Data Guard gwarantuje</h2>
 					<ol>
 						<li>Dostępność</li>
-						<li>Ochronę danych</li>
+						<li>Ochronę danych </li>
+						<!--(przeciwko data corruption)-->
 						<li>Odzyskiwanie danych</li>
 					</ol>
 					<br>
@@ -62,18 +63,68 @@
 
 
 					<section>
-						<h2 style="color:#B2DFDB">DG configuration</h2>
-						<p>Konfiguracja DG skłąda się z primary(głównej) bazy i co najmniej jednej standby(zapasowej) bazy.
+						<h2 style="color:#B2DFDB">Konfiguracja Data Guard</h2>
+						<p>Konfiguracja Data Guard składa się z : </p>
+						<ul>
+							<li>
+							 <b>primary</b> (głównej) baz
+							</li>
+							<li>
+								<b>standby</b>(zapasowej) bazy.
+								<!--Conajmniej jednej!!!!-->
+							</li>
+						</ul>
+						<P>
 						Bazy danych w konfiguracji Oracle Data Guard są połączone za pomocą Oracle Net i mogą być rozproszone geograficznie.
+						<!--
 						Nie ma żadnych ograniczeń na to gdzie znajdują się bazy, jedyne wymaganie to żeby bazy mogły się lączyć między sobą.
+							Na przykłąd:
+								Można mieć jedną standby(zapasową) bazę i główną na tych samych systemach,
+								a dwię inne instancje zapasowych na innych systemach w kompletnie innnych geograficznych lokacjach
+
+						Zarówną główną jak i zapasowymi bazami danych
+						 można zarządzać poprzez SQL command line
+						 lub Data Guards broker interface,
+						 albo UI zintegrowan z Oracle Enterprise Manager.
+						-->
 						</p>
 					</section>
 
 				<section>
-					<h2 style="color:#B2DFDB">Primary DB</h2>
-					<p>Konfiguracja DG zawiera jedną produkcyjną bazę danych(albo primary DB). To baza którą wykorzystujemy najczęściej.
+					<h2 style="color:#B2DFDB">Primary Database</h2>
+					<p> Konfiguracja Data Guard zawiera jedną produkcyjną bazę danych, lub odwołuje się do bazy danych, która funkcjonuje jako primary.
+
+						<!--W przypadku gdy główna baza danych zostanie niedostępna  z powodu planowanej lub nieplanowanej przerwy.-->
+						<!--Data Guard może zamienić każdą standby database w rolę głównej, minimalizując czas niedostępności powiązanej z przerwą.-->
 					</p>
 				</section>
+
+				<section>
+					<h2 style="color:#B2DFDB">Standby Database</h2>
+					<p> Zapasowa baza danych jest tranzakcyjnie spójną kopią głównej bazy.
+
+						<!--
+						Spójność tranzakcyjna (Transactionally Consistent) - znaczy że istnieje snapshot bazy w punkcie czasu
+						który zapewnia że wszystkoe scommitowane tranzakcje mają swoje odzwierciedlenie w bazie a nie scommitowane tranzakcje nie mają
+						-->
+
+						<!--
+						Używając backup kopi głownej bazy można stworzyć do 9 zapasowych baz i włączyć je do konfiguracji Data Guarda.
+						Po stworzeniu kopii, Data Guards automatycznie podtrzymuje każdą zapasową bazę poprzez przesyłanie "redo data"(redolog)
+						z głownej bazy i następnie zastosowywując je w kopiach zapasowych.
+						-->
+
+						<!--
+						Redo data (Redologi) - rejestrują wszystkie zatwierdzone (commit) tranzakcje bazy danych,
+						czyli te operacje które coś zmieniają w bazie. Standardowo po instalacji bazy są trzy grupy plików redo logs o określonej wielkości.
+						Jeśli pierwszy z plików się zapełni transakcje zapisywane są do następnego pliku i tak w koło.
+
+						Gdy baza działa w bezpiecznym trybie archiwizacji logów, zapełniony plik jest archiwizowany
+						czyli zmienia się w plik archive logs (*.arc).
+						-->
+					</p>
+				</section>
+
 
 				<section>
 					<h1><a style="color:#95cde7">Dziękujemy za uwagę</a></h1>
