@@ -123,6 +123,146 @@
 						czyli zmienia się w plik archive logs (*.arc).
 						-->
 					</p>
+
+				</section>
+
+				<section>
+					<h2 style="color:#95cde7">Zapasowa baza danych moze być zarówną fizyczną kopią bazy jak i logiczną</h2>
+					<ul>
+						<li><h3>Fizyczna zapasowa baza danych</h3></li>
+						<p>
+							Dostarcza fizycznie identyczną kopię głownej bazy danych ze strukturami bazy,
+							które są identyczne jak te w gównej bazie na zasadzie "block-for-block".
+						</p>
+						<p>
+							Fizyczna kopia bazy jest synchronizowana z głowną bazą, poprzez <b>'Redo Apply'</b>
+						</p>
+						<!--
+						Schemat bazy, włączając w to indeksy są te same. Fizyczna kopia bazy jest synchronizowana
+						z głowną bazą, poprzez 'Redo Apply', które przywraca redo data otrzymane z głownej bazy
+						i zastosowywuje the redo do fizycznej zapasowej bazy danych.
+
+						Fizyczne kopie bazy mogą być uzywane w celach biznesowych innych niż zapobieganie utraty danych. (???)
+						-->
+						<li><h3>Logiczna zapasowa baza danych</h3></li>
+						<p>
+							Zawiera te same logiczne informacje jak produkcyjna baza danych, jednakże fizyczna organizacja i struktura danych może być inna.
+						</p>
+						<p>
+							Logiczna zapasowa baza jest synchronizowana z  głowną  poprzez <b>'SQL Apply'</b>.
+							<!--
+							który przekształca dane otrzymane w redo z głownej bazy w SQL statements i wykonuje je na kopii bazy.
+							-->
+						</p>
+						<!--
+						Logiczna kopia bazy może być użyta w innych biznesowych celach jako dodatek, Co pozwala użytkownikowi na dostęp do zapytań z zapasowej bazy.
+						Co więcej, używająć logicznej kopi , można upgradowac Oracle Database software i patchowac z praktycznie zerowym czasem przestoju.
+						Logiczne kopie można używać równoczesnie do ochrony danych, reportowania i upgradów bazy.
+						-->
+					</ul>
+				</section>
+
+				<section>
+					<h1><a style="color:#95cde7">Przykładowa konfiguracja</a></h1>
+					<img src="https://docs.oracle.com/cd/B19306_01/server.102/b14239/img/ps_config.gif">
+					<p>Na obrazku jest przedstawiona typowa konfiguraracja Oracle Data Guard która zawiera primary database i zapasową bazę danych.
+					Zapasowa baza danych jest zamieszczona w innej lokalizacji niź główna baza danych. Zapasowa baza danych może znajdować się obok głównej bazy danych, ale Oracle
+					rekomenduje umiejscowić zapasową bazę danych w innej lokalizacji.</p>
+				</section>
+
+				<section>
+					<h2><a style="color:#95cde7">Data Guards Services</a></h2>
+
+					<ul>
+						<li> <h4>Redo Transport Services</h4>
+							<p>
+								kontroluje automatyczny transfer redo data z produkcyjnej bazy danych do jednego lub więcej instancji archiwizujacych.
+							</p>
+						</li>
+						<li> <h4>Log Apply Services</h4>
+							<p>
+								Zastosowywuje redo data na zapasowych kopiach bazy danych do podtrzymania tranzakcyjnej synchronizacji z główną bazą danych.
+							</p>
+							<!--
+							Redo data mogą być zastosowywane zarówno z archiwalnych plików red logów jak i
+							gdy jest możliwe zastosowywanie w czasie rzeczywistym to nie czekamy na pliki żeby zostały zarchwizowane,
+							tylko bezposrednio je przesyłamy.
+							-->
+						</li>
+						<li> <h4>Role Transitions</h4>
+							<p>
+								Zmiana roli bazy danych z zapasowej w głowną lub z głównej w zapasową
+								z wykorzystaniem zarówno operacji 'switchover' jak i 'failover'.
+							</p>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2><a style="color:#95cde7">Redo Transport Services</a></h2>
+					<p>
+						kontroluje automatyczny transfer redo data z produkcyjnej bazy danych do jednego lub więcej instancji archiwizujacych.
+					</p>
+					<h3>Zadania</h3>
+					<!-- Redo Transport Services wykonuje poniższe zadania:-->
+					<ul>
+						<li>Transport redo data z głownej bazy do kopi zapasowych w konfiguracji.</li>
+						<li>Rozwiązywanie problemów powstałych wobez luk w redo logach spowodowanych awarią.</li>
+						<li>Wdrążanie modów zabezpieczenia bazy</li>
+						<li>Automatyczne wynajdywanie brakujących lub uszkodzonych zarchiwizowanych redo logów
+							na zapasowym systemie i automatyczne zastępowanie zarchiwizowanych redo logów z innych baz danych </li>
+						<!-- Głównych lub zapasowych -->
+					</ul>
+				</section>
+
+				<section>
+					<h2><a style="color:#95cde7">Log Apply Services</a></h2>
+					<p>
+						Zastosowywuje redo data na zapasowych kopiach bazy danych do podtrzymania tranzakcyjnej synchronizacji z główną bazą danych.
+					</p>
+					<!-- Pozwala również na dostęp read-only do danych-->
+					<!--
+						Główną różnicą pomiędzy fizyczną i logiczną kopią zapasową bazy danych jest sposób w jaki
+						log apply services zastosowywuje zarchiwizowane redo logi
+
+						Dla fizyczne kopie baz danych - Data Guard uzywa Redo Apply które zastosowywike redo data
+						na zapasową baze uzywajac standardowegej techniki przywracania w Oraclowych bazach
+
+
+						Dla Logicznych kopi zapasowych, Data Guards uzywa SQL Apply która najpierw przekształca
+						otrzymane redo data w SQL statements i następnie wykonuje  generowane SQL statements na logicznej kopi.
+					-->
+
+				</section>
+
+				<section>
+					<h2><a style="color:#95cde7">Role Transitions</a></h2>
+					<p>
+						Wykorzystując Data Guard możemy zmienić rolę bazy danych z zapasowej w głowną lub z głównej w zapasową
+						z wykorzystaniem zarówno operacji 'switchover' jak i 'failover'.
+					</p>
+						<ul>
+							<li>
+								Switchover jest odwróceniem roli pomiędzy głowną bazą danych i jedną z jej kopii. Switchover zapewnia zabezpieczenie przez utratą danych.
+								<!--
+									Jest głownie wykorzystywany dla zaplanowanych konserwacji głownego systemu. Podzczas switchover głowna baza jest przenoszona do roli zapasowej,
+									a zapasowa do roli głownej. Przeniesienie występuje bez potrzeby odtwarzania którejkolwiek bazy
+								-->
+							</li>
+							<li>
+								Failover jest gdy głowna baza jest niedostepna.
+								<!--
+									Failover jest dokonywany tylko wtedy gdy zaistnieje sytuacja katastroficznego błedu głownej bazy
+									i wynikiem failoveru jest przeniesienie kopi bazy do roli głownej. Wtedy administrator bazy może skonfigurować Data Guardsa żeby zapewnić brak utraty danych.
+
+									Przenoszenie ról opisane powyżej są wykonywane poprzez ręczne użycie SQL statements.
+								-->
+							</li>
+						</ul>
+				</section>
+
+				<section>
+					<h2><a style="color:#95cde7">Data Guard Broker</a></h2>
 				</section>
 
 
