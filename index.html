@@ -302,7 +302,11 @@
 					</li>
 						<li>
 							Maximum performance - ten mode(domyslny) udostepnia najwyzszy poziom zabezpieczenia danych ktory jest mozliwy bez wplywu na wydajnosc
-							glownej bazy danych. To jest realizowane poprzez pozwolenie transakcjom na komitowanie natychmiast po tym jak redo data potrzebne do
+							glownej bazy danych. To jest realizowane poprzez pozwolenie transakcjom na komitowanie natychmiast po tym jak redo data potrzebne do odzyskania tej transakcji sa zapisane na chociazby jednej zapasowej nazie danych
+							, ale ten redo stream jest zapisywany asynchronicznie z poszanowaniem dla transakcji ktora stworzyla redo data.
+
+							Kiedy bazy sa polaczone siecia z wystarczajaca przepustowscia ten mod zapewnia poziom ochrony podobny do Maximum availability z minimalnym wplywem na
+							wydajnosc glownej bazy danych.
 						</li>
 					</ul>
 				</section>
