@@ -397,7 +397,7 @@
 
 				<section>
 					<h2>Data Guard Broker</h2>
-					<aside class="note">
+					<aside class="notes">
 						Data Guard broker jest frameworkiem do zarządzania, który automatyzuje tworzenie, utrzymywanie i monitorowanie konfiguracji Data Guarda.
 						Do wyboru mamy wersje Oracle Enterprise Manager (GUI) lub konsolową.
 						Co możemy dzieki temu zrobic:
@@ -411,9 +411,213 @@
 				</section>
 
 				<section>
-					<h1>Proces konfiguracji: 1 primary database, 1 Physical Standby database</h1>
+					<h1>Proces konfiguracji:</h1>
+					<h3>1 primary database, 1 Physical Standby database</h3>
+
+					<h4>Przygotowanie</h4>
+
+					<p>Istotne:</p>
+					<ul>
+						<li>Oracle SID/Global_name - taki samy na wszystkich instancjach</li>
+						<li>Oracle db_unique_name - kazda baza ma unikalny</li>
+					</ul>
+
+					<p>Inne:</p>
+					<ul>
+						<li>Wersja oracle na wszystkich instancjach bazy powinna być identyczna.</li>
+					</ul>
+					<aside class="notes">
+						W naszym przypadku mamy dwie maszyny o róznych nazwach, które muszą się pingować nawzajem.
+						Musimy znać ich IP.
+						Na 1 maszynie musimy mieć software oracle i jego instancje, na zapasowej tylko software.
+					</aside>
 
 				</section>
+
+				<section>
+					<h2>Konfiguracja Primary(Głownej) bazy</h2>
+
+
+					<p>Kroki:</p>
+					<ul>
+						<li>Uruchomienie trybu automatycznej archiwizacji logów</li>
+						 <pre><code data-trim>
+SQL> archive log list // Sprawdzenie, czy tryb włączony
+SQL> SHUTDOWN IMMEDIATE;
+SQL> STARTUP MOUNT;
+SQL> ALTER DATABASE ARCHIVELOG;
+SQL> ALTER DATABASE OPEN;
+SQL> archive log list; // Tryb powinien być włączony
+						 </code></pre>
+
+						<li>Uruchomienie trybu force logging</li>
+						<pre><code data-trim>SQL> ALTER DATABASE FORCE LOGGING;</code></pre>
+
+						<li>Ustawiamy LOG_ARCHIVE_CONFIG parametr na konfiguracje data guard </li>
+						<pre><code data-trim>SQL> ALTER SYSTEM SET LOG_ARCHIVE_CONFIG='DG_CONFIG=(unique_name_primary,unique_name_standby)'
+SQL> show parameter LOG_ARCHIVE_CONFIG</code></pre>
+
+					</ul>
+				</section>
+
+				<section>
+					<h2>Konfiguracja Primary(Głownej) bazy</h2>
+
+
+					<p>Kroki:</p>
+					<ul>
+						<li>Definiujemy LOG_ARCHIVE_DEST_n w tym wypadku n = 2</li>
+						<pre><code data-trim>SQL> ALTER SYSTEM SET LOG_ARCHIVE_DEST_2='SERVICE=RTSDR NOAFFIRM ASYNC
+VALID_FOR=(ONLINE_LOGFILES,PRIMARY_ROLE) DB_UNIQUE_NAME=RTSDR';</code></pre>
+						<aside class="notes">
+						Kazdy log_archive_dest musi zawierac atrybut location lub service, który precyzuje lokacje na dysku lub zdalnie dostępna baze.
+							(Wszystkie inne atrybuty sa opcjonalne)
+							ANALIZA ATRYBUTOW:
+							- NOAFFIRM/AFFRIRM - kontrolują czy miejsce docelowane redo transportu uznaje pozyskane redo data przed czy po zapisaniem ich do redo logow kopi zapasowej
+							Na ogół noAffirm jest powiazane z ASYNC czyli asynchronicznym sposobem wysylania redo data. A Affirm z SYNC
+							- VALID FOR - prezycuje czy redo data zostaną zapisane, na podstawie dwóch czynników:
+								- czy baza jest aktualnie działająca jako głowna czy zapasowa
+							    - czy online redo logi, zapasowe redo logi, badz obydwa są aktualnie zarchiwizowane w tej lokacji.
+							- INNE PRZYKLADOWE:
+								- ALTERNATE - prezycuje alternatywne lokacje archiwizacji, uzywane gdy orginalna ulegnie problemom.
+							    - COMPRESSION - uzywane gdy redo data są wysyłane w formie skompresowanej
+							    - DELAY - okresla time lag pomiedzy kiedy redo data są archiwizowane po stronie kopi zapasowen i kiedy zarchiwizowane redo logi są stosowane na zapasowej bazie danych
+						        - MAX_CONNECTIONS
+							    - MAX_FAILURE - maksymalna ilosc porażek zanim głowna baza podda się z wysylaniem redo data do tej lokacji
+
+						</aside>
+
+						<li>Włączamy log_archive_dest_state_2</li>
+						<pre><code data-trim>SQL> alter system set log_archive_dest_state_2=enable;</code></pre>
+
+						<li>Ustawiamy format log_archive</li>
+						<pre><code data-trim>SQL> alter system set log_archive_format='%t_%s_%r.arc' scope=spfile;
+						</code></pre>
+
+
+						<li>Ustawiamy max procesów na 30</li>
+						<pre><code data-trim>SQL> alter system set log_archive_max_processes=30;;
+						</code></pre>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Konfiguracja Primary(Głownej) bazy</h2>
+
+
+					<p>Kroki:</p>
+					<ul>
+						<li> Ustawiamy remote_login_passwordfile parameter na "exclusive"</li>
+						<pre><code data-trim> SQL> alter system set remote_login_passwordfile=exclusive scope=spfile;</code></pre>
+						<aside class="notes">
+							- exclusive - plik z haslem może być używane tylko przez jedną baze.
+							Password file mozę zawierać użytkonwików sys tak samo jak non-sys
+							- shared - jedna lub wiecej baz uzywa tego file
+							- none - autentykacja odbywa się poprzez system
+						</aside>
+
+						<li>Ustawiamy fal_server i fal_client</li>
+
+						<pre><code data-trim>SQL> alter system set fal_server=RTSDR;
+alter system set fal_client='RTS';</code></pre>
+						<aside class="notes"> Ustawiamy FAL ( Featch archive Log) server dla zapasowej bazy danych,
+							FAL_client, ustawiamy nazwe klienta uzywanego przez FAL serwis</aside>
+
+						<li>Ustawiamy standby_file_managmement</li>
+						<pre><code data-trim>SQL> alter system set standby_file_management=auto;
+						</code></pre>
+						<aside class="notes">
+							Auto albo manual. Pozwala na autoamtyczne nadpisywanie plików.
+						</aside>
+
+						<li>Konfiguracja listenerów i tnsnames na obu serverach</li>
+
+					</ul>
+
+				</section>
+
+				<section>
+					<h2>Konfiguracja Primary(Głownej) bazy</h2>
+
+					<p>Kroki:</p>
+					<ul>
+
+						<li> BACKUP primary database porpzez RMAN backup utility</li>
+						<pre><code data-trim> cmd>  rman target /
+RMAN> backup database plus archivelog;</code></pre>
+
+
+						<li>Tworzenie plików Standby control</li>
+						<pre><code data-trim>SQL> alter database create standby controlfile as
+'/db_1/bkup/stndbyctrl.ctl';</code></pre>
+
+						<li>Tworzenie plików pfile z spfile</li>
+						<pre><code data-trim>SQL> create pfile='/u01/bkup/initRTS.ora' from spfile;
+						</code></pre>
+
+						<li>Kopiowanie plików na instancje zapasowej bazy</li>
+							<p>(pfile, standby control file, password file, listener file i RMAN backup)</p>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Konfiguracja StandBy(Zapasowej) bazy</h2>
+
+					<p>Kroki:</p>
+					<ul>
+
+						<li> Tworzenie spfile z pfile</li>
+						<pre><code data-trim>SQL> create spfile from pfile='oracle/product/10.2.0/db_1/dbs/initRTS.ora';</code></pre>
+
+
+						<li>Wystartowanie listenera na zapasowej isntancji</li>
+						<pre><code data-trim>> lsnrctl start</code></pre>
+
+						<li>Odwtwórz i przywróc baze danych z RMAN backup utility</li>
+						<pre><code data-trim>RMAN> list backup of database summary;
+RMAN> restore database;
+RMAN> recover database;</code></pre>
+
+						<li>Stworzenie plików standby redolog</li>
+						<pre><code data-trim>SQL> sqlplus / as sysdba
+SQL> ALTER SYSTEM SET STANDBY_FILE_MANAGEMENT='MANUAL' scope=spfile;
+SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby1.log') size 51M;
+SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby2.log') size 51M;
+SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby3.log') size 51M;
+SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby4.log') size 51M;
+SQL> ALTER SYSTEM SET STANDBY_FILE_MANAGEMENT='AUTO' scope=spfile;</code></pre>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Konfiguracja StandBy(Zapasowej) bazy</h2>
+
+					<p>Kroki:</p>
+					<ul>
+
+						<li>Wystartowanie procesu</li>
+						<pre><code data-trim>SQL> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE nodelay DISCONNECT FROM SESSION;</code></pre>
+
+
+						<li>Wystartowanie listenera na zapasowej isntancji</li>
+						<pre><code data-trim>> lsnrctl start</code></pre>
+
+						<li>Odwtwórz i przywróc baze danych z RMAN backup utility</li>
+						<pre><code data-trim>RMAN> list backup of database summary;
+RMAN> restore database;
+RMAN> recover database;</code></pre>
+
+						<li>Stworzenie plików standby redolog</li>
+						<pre><code data-trim>SQL> sqlplus / as sysdba
+SQL> ALTER SYSTEM SET STANDBY_FILE_MANAGEMENT='MANUAL' scope=spfile;
+SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby1.log') size 51M;
+SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby2.log') size 51M;
+SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby3.log') size 51M;
+SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby4.log') size 51M;
+SQL> ALTER SYSTEM SET STANDBY_FILE_MANAGEMENT='AUTO' scope=spfile;</code></pre>
+					</ul>
+				</section>
+
 
 				<section>
 					<h1><a style="color:#95cde7">Dziękujemy za uwagę</a></h1>
