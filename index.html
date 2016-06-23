@@ -188,7 +188,11 @@
 
 				<section>
 					<h2><a style="color:#95cde7">Data Guards Services</a></h2>
-
+					<aside class="notes"> Na nastepnych slajdach sprobujemy wytlumaczyc jak DG radzi sobie z przesylaniem redo data, aplikacją redo data
+					 i zmianami rol baz danych.</aside>
+						<!--Redo data mogą być zastosowywane zarówno z archiwalnych plików red logów jak i-->
+						<!--gdy jest możliwe zastosowywanie w czasie rzeczywistym to nie czekamy na pliki żeby zostały zarchwizowane,-->
+						<!--tylko bezposrednio je przesyłamy.</aside>-->
 					<ul>
 						<li> <h4>Redo Transport Services</h4>
 							<p>
@@ -199,11 +203,6 @@
 							<p>
 								Zastosowywuje redo data na zapasowych kopiach bazy danych do podtrzymania tranzakcyjnej synchronizacji z główną bazą danych.
 							</p>
-							<aside class="notes">
-							Redo data mogą być zastosowywane zarówno z archiwalnych plików red logów jak i
-							gdy jest możliwe zastosowywanie w czasie rzeczywistym to nie czekamy na pliki żeby zostały zarchwizowane,
-							tylko bezposrednio je przesyłamy.
-							</aside>
 						</li>
 						<li> <h4>Role Transitions</h4>
 							<p>
@@ -236,10 +235,7 @@
 					<p>
 						Zastosowywuje redo data na zapasowych kopiach bazy danych do podtrzymania tranzakcyjnej synchronizacji z główną bazą danych.
 					</p>
-					<aside class="notes"> Pozwala również na dostęp read-only do danych </aside>
-						<aside class="notes">
-
-						Główną różnicą pomiędzy fizyczną i logiczną kopią zapasową bazy danych jest sposób w jaki
+					<aside class="notes">  Główną różnicą pomiędzy fizyczną i logiczną kopią zapasową bazy danych jest sposób w jaki
 						log apply services zastosowywuje zarchiwizowane redo logi
 
 						Dla fizyczne kopie baz danych - Data Guard uzywa Redo Apply które zastosowywike redo data
@@ -247,8 +243,7 @@
 
 
 						Dla Logicznych kopi zapasowych, Data Guards uzywa SQL Apply która najpierw przekształca
-						otrzymane redo data w SQL statements i następnie wykonuje  generowane SQL statements na logicznej kopi.
-					</aside>
+						otrzymane redo data w SQL statements i następnie wykonuje  generowane SQL statements na logicznej kopi. </aside>
 
 				</section>
 
@@ -281,12 +276,12 @@
 				<section>
 					<h2><a style="color:#95cde7">Data Guard Broker</a></h2>
 					<p> Data Guard broker to dostarczany framework zarządzania automatyzujący tworzenie, podtrzymywanie i monitorowanie konfiguracji Data Guard.</p>
-					<aside class="notes">Możęmy wyorzystywać albo graficzny interfejs Oracle Enterprise Manager albo command line Data Guarda do
-					  -Tworzenia i uruchomenia konfiguracji Data Guard, zawierając ustawienia Redo Transport Service i Log Apply Services.
+					<aside class="notes">Możemy wykorzystywać albo graficzny interfejs Oracle Enterprise Manager albo command line Data Guarda do
+					  -Tworzenia i uruchomienia konfiguracji Data Guard, zawierając ustawienia Redo Transport Service i Log Apply Services.
 					   -Zarzadzanie całą konfiguracją Data Guarda z kążdego systemu w konfiguracji.
-					   -Ulatwienie switchovers i failovers poprzez pozwalanie na uruchomienie cih za pomocą jednego przycisku w Oracle Enterprise Manager albo jednego polecenia
+					   -Ulatwienie switchovers i failovers poprzez pozwalanie na uruchomienie ich za pomocą jednego przycisku w Oracle Enterprise Manager albo jednego polecenia
 					   w interfejsie DGMGRL command line
-					    - Pozwala na szybki start failovera kiedy glowna baza danych jest niedostępna. Kiedy szybki start failovera jest wlączony Data Guard
+					    - Pozwala na automatyczny szybki start failovera kiedy glowna baza danych jest niedostępna. Kiedy szybki start failovera jest wlączony Data Guard
 					    broker wyznacza jesli failover jest wymagany i inicjalizuje failover dla sprecyzowanej zapasowej bazy danych automatycznie przez co nie ryzykuje strata danych.
 					  </aside>
 					Dodatkowo , Oracle Enterprise Manager automatyzuje i upraszcza
@@ -300,30 +295,30 @@
 
 				<section>
 					<h2>Data Guard Protection Modes</h2>
-					<p>W niektorych sytuacjach biznes nie moze sobie pozwolic na jakakolwiek utrate danych. W innych przypadkach dostepnosc bazy danych
-					jest waniejsza od utraty danych.Niektore aplikacje wymagaja maksymalnej wydajnosci i moga tolerowac male utraty danych. teraz opiszemy 3 podstawowe
-					tryby zabezpieczenia danych</p>
-					<ul>
-						<li>Maximum protection - zapewnia ze zadne dane nie beda stracone nawet jesli glowna baza zawiedzie.
-						Zeby dostarczyc taki poziom zabezpieczenia redo data potrzebne do odtworzenia kazdej transakcji musza byc zapisane do obu - loklanych online redo legow i do zapasowych redo logow
+					<aside class="notes">W niektorych sytuacjach biznes nie moze sobie pozwolic na jakakolwiek utrate danych. W innych przypadkach dostepnosc bazy danych
+					jest waniejsza od utraty danych. Niektore aplikacje wymagaja maksymalnej wydajnosci i moga tolerowac male utraty danych. teraz opiszemy 3 podstawowe
+					tryby zabezpieczenia danych
+					MP - Zeby dostarczyc taki poziom zabezpieczenia redo data potrzebne do odtworzenia kazdej transakcji musza byc zapisane do obu - loklanych online redo legow i do zapasowych redo logow
 						na prynajmniej jednej zapasowej bazie danych przed tym jak transakcja bedzie skomitowana.
 						Zeby upewnic sie ze utrata danych nie nastapi glowna baza wylacza sie jesli usterka nie pozwala na zapisanie redo streama do zapasowych redo logow w co najmniej jednej transakcyjnie spojnej zapasowej bazy danych,</li>
-					<li>
-						Maximum availability - protetion mode ktory dostarcza najwyzszy poziom ochrony danych ktory jest mozliwy bez kompromitowania dostepnosci glownej bazy danych.
-						Podobnie do maximum protectin mode  transakcja nie bedzie skomitowana dopoki redo potrzebne do przywracania tej transakcji nie bedzie zapisane do lokalnych online redo logow
+					MA - Podobnie do maximum protectin mode  transakcja nie bedzie skomitowana dopoki redo potrzebne do przywracania tej transakcji nie bedzie zapisane do lokalnych online redo logow
 						i do zapasowych redo logow na co najmniej jednej transakcyjnie spojnej zapasowej bazie danych.W odroznieniu od maximum protection mode glowna baza nie wylaczy sie jesli usterka
 						nie pozwala na zapisanie redo streama do zapasowych redo logow. Natomiast, glowna baza danych operuje w maximum performance mode  dopoki usterka nie bedzie naprawiona i wszystkie luki
 						w redo logach nie beda naprawione. Kiedy wszystkie luki beda naprawione glowna baza danych automatycznie wznowia dzialanie w maximum availability mode.
 
 						Ten mode zapewnia ze dane nie zostna utracone jesli glowna baza danych zawiedzie, ale tylko jesli usterka nie przeszkodzi wyslaniu wszystkich redo logow od glownej bazy do chociazby jednej zapasowej bazy danych.
-					</li>
+					MP -  To jest realizowane poprzez pozwolenie transakcjom na komitowanie natychmiast po tym jak redo data potrzebne do odzyskania tej transakcji sa zapisane na chociazby jednej zapasowej nazie danych
+						, ale ten redo stream jest zapisywany asynchronicznie z poszanowaniem dla transakcji ktora stworzyla redo data.
+
+						Kiedy bazy sa polaczone siecia z wystarczajaca przepustowscia ten mod zapewnia poziom ochrony podobny do Maximum availability z minimalnym wplywem na
+						wydajnosc glownej bazy danych.
+					</aside>
+					<ul>
+						<li>Maximum protection - zapewnia ze zadne dane nie beda stracone nawet jesli glowna baza zawiedzie.</li>
+						<li>Maximum availability - protetion mode ktory dostarcza najwyzszy poziom ochrony danych ktory jest mozliwy bez kompromitowania dostepnosci glownej bazy danych.</li>
 						<li>
 							Maximum performance - ten mode(domyslny) udostepnia najwyzszy poziom zabezpieczenia danych ktory jest mozliwy bez wplywu na wydajnosc
-							glownej bazy danych. To jest realizowane poprzez pozwolenie transakcjom na komitowanie natychmiast po tym jak redo data potrzebne do odzyskania tej transakcji sa zapisane na chociazby jednej zapasowej nazie danych
-							, ale ten redo stream jest zapisywany asynchronicznie z poszanowaniem dla transakcji ktora stworzyla redo data.
-
-							Kiedy bazy sa polaczone siecia z wystarczajaca przepustowscia ten mod zapewnia poziom ochrony podobny do Maximum availability z minimalnym wplywem na
-							wydajnosc glownej bazy danych.
+							glownej bazy danych.
 						</li>
 					</ul>
 				</section>
