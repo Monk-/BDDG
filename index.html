@@ -90,14 +90,13 @@
 						<P>
 						Bazy danych w konfiguracji Oracle Data Guard są połączone za pomocą Oracle Net i mogą być rozproszone geograficznie.
 
-
-							<aside class="notes">
-						Nie ma żadnych ograniczeń na to gdzie znajdują się bazy, jedyne wymaganie to żeby bazy mogły się lączyć między sobą.
+                            <aside class="notes">
+						    Nie ma żadnych ograniczeń na to gdzie znajdują się bazy, jedyne wymaganie to żeby bazy mogły się łączyć między sobą.
 							Na przykłąd:
 								Można mieć jedną standby(zapasową) bazę i główną na tym samym systemie,
 								a dwię inne instancje zapasowych na innych systemach w kompletnie innnych geograficznych lokacjach
 
-						Zarówno główną jak i zapasowymi bazami danych można zarządzać poprzez SQL command line
+						        Zarówno główną jak i zapasowymi bazami danych można zarządzać poprzez SQL command line
 								lub Data Guards broker interface, albo UI zintegrowane z Oracle Enterprise Manager.
 						</aside>
 						</p>
@@ -107,8 +106,9 @@
 					<h2 style="color:#B2DFDB">Primary Database</h2>
 					<p> Konfiguracja Data Guard zawiera jedną produkcyjną bazę danych, lub odwołuje się do bazy danych, która funkcjonuje jako primary.
 
-						<aside class="notes">W przypadku gdy główna baza danych będzie niedostępna  z powodu planowanej lub nieplanowanej przerwy.
-						Data Guard może zamienić każdą standby database w rolę głównej, minimalizując czas niedostępności powiązanej z przerwą.
+						    <aside class="notes">
+                            W przypadku gdy główna baza danych będzie niedostępna  z powodu planowanej lub nieplanowanej przerwy.
+						    Data Guard może zamienić każdą standby database w rolę głównej, minimalizując czas niedostępności powiązanej z przerwą.
 							</aside>
 					</p>
 				</section>
@@ -151,27 +151,32 @@
 						<p>
 							Fizyczna kopia bazy jest synchronizowana z głowną bazą, poprzez <b>'Redo Apply'</b>
 						</p>
-						<aside class="notes">
-						Schemat bazy, włączając w to indeksy jest taki sam. Fizyczna kopia bazy jest synchronizowana
-						z głowną bazą, poprzez 'Redo Apply', które przywraca redo data otrzymane z głownej bazy
-						i zastosowywuje redo do fizycznej zapasowej bazy danych.
 
+						<aside class="notes">
+						    Schemat bazy, włączając w to indeksy jest taki sam. Fizyczna kopia bazy jest synchronizowana
+						    z głowną bazą, poprzez 'Redo Apply', które przywraca redo data otrzymane z głownej bazy
+						    i zastosowywuje redo do fizycznej zapasowej bazy danych.
 						</aside>
+
 						<li><h3>Logiczna zapasowa baza danych</h3></li>
 						<p>
 							Zawiera te same logiczne informacje jak produkcyjna baza danych, jednakże fizyczna organizacja i struktura danych może być inna.
 						</p>
 						<p>
 							Logiczna zapasowa baza jest synchronizowana z  głowną  poprzez <b>'SQL Apply'</b>.
-							<aside class="notes">
+
+                            <aside class="notes">
 							który przekształca dane otrzymane w redo z głownej bazy w SQL statements i wykonuje je na kopii bazy.
 							</aside>
+
 						</p>
+
 						<aside class="notes">
-						Logiczna kopia bazy może być użyta w innych biznesowych celach jako dodatek, co pozwala użytkownikowi na dostęp do zapytań z zapasowej bazy.
-						Co więcej, używająć logicznej kopi, można upgradowac Oracle Database software i patchowac z praktycznie zerowym czasem przestoju.
-						Logiczne kopie można używać równoczesnie do ochrony danych, reportowania i upgradów bazy.
+						    Logiczna kopia bazy może być użyta w innych biznesowych celach jako dodatek, co pozwala użytkownikowi na dostęp do zapytań z zapasowej bazy.
+						    Co więcej, używająć logicznej kopi, można upgradowac Oracle Database software i patchowac z praktycznie zerowym czasem przestoju.
+						    Logiczne kopie można używać równoczesnie do ochrony danych, reportowania i upgradów bazy.
 						</aside>
+
 					</ul>
 				</section>
 
@@ -203,7 +208,7 @@
 						</li>
 						<li> <h4>Role Transitions</h4>
 							<p>
-								Zmiana roli bazy danych z zapasowej w głowną lub z głównej w zapasową
+								Zmiana roli bazy danych z zapasowej na główną lub z głównej na zapasową
 								z wykorzystaniem zarówno operacji 'switchover' jak i 'failover'.
 							</p>
 						</li>
@@ -213,7 +218,7 @@
 				<section>
 					<h2><a style="color:#95cde7">Redo Transport Services</a></h2>
 					<p>
-						kontroluje automatyczny transfer redo data z produkcyjnej bazy danych do jednej lub więcej instancji archiwizujacych.
+						Kontroluje automatyczny transfer redo data z produkcyjnej bazy danych do jednej lub więcej instancji archiwizujacych.
 					</p>
 					<h3>Zadania</h3>
 					<aside class="notes"> Redo Transport Services wykonuje poniższe zadania: </aside>
@@ -235,8 +240,8 @@
 					<aside class="notes"> Główną różnicą pomiędzy fizyczną i logiczną kopią zapasową bazy danych jest sposób w jaki
 						log apply services zastosowywuje zarchiwizowane redo logi
 
-						Dla fizycznej kopie baz danych - Data Guard uzywa Redo Apply które zastosowywike redo data
-						na zapasową baze uzywajac standardowegej techniki przywracania w Oraclowych bazach
+						Dla fizycznej kopii baz danych - Data Guard uzywa Redo Apply które zastosowywuje redo data
+						na zapasowej bazie uzywajac standardowegej techniki przywracania w Oraclowych bazach
 
 
 						Dla Logicznych kopi zapasowych, Data Guards uzywa SQL Apply która najpierw przekształca
@@ -247,7 +252,7 @@
 				<section>
 					<h2><a style="color:#95cde7">Role Transitions</a></h2>
 					<p>
-						Wykorzystując Data Guard możemy zmienić rolę bazy danych z zapasowej w głowną lub z głównej w zapasową
+						Wykorzystując Data Guard możemy zmienić rolę bazy danych z zapasowej na głowną lub z głównej na zapasową
 						z wykorzystaniem zarówno operacji 'switchover' jak i 'failover'.
 					</p>
 						<ul>
@@ -261,8 +266,9 @@
 							<li>
 								Failover jest gdy głowna baza jest niedostepna.
 								<aside class="notes">
-									Failover jest dokonywany tylko wtedy gdy zaistnieje sytuacja katastroficznego błedu głownej bazy
-									i wynikiem failoveru jest przeniesienie kopii bazy do roli głownej. Wtedy administrator bazy może skonfigurować Data Guard żeby zapewnić brak utraty danych.
+									Failover jest dokonywany tylko wtedy gdy zaistnieje sytuacja katastroficznego błedu głównej bazy
+									i wynikiem failoveru jest przeniesienie kopii bazy do roli głownej. 
+									Wtedy administrator bazy może skonfigurować Data Guard żeby zapewnić brak utraty danych.
 
 									Przenoszenie ról opisane powyżej są wykonywane poprzez ręczne użycie SQL statements.
 								</aside>
@@ -273,49 +279,62 @@
 				<section>
 					<h2><a style="color:#95cde7">Data Guard Broker</a></h2>
 					<p> Data Guard broker to dostarczany framework zarządzania automatyzujący tworzenie, podtrzymywanie i monitorowanie konfiguracji Data Guard.</p>
-					<aside class="notes">Możemy wykorzystywać albo graficzny interfejs Oracle Enterprise Manager albo command line Data Guarda do
-					  -Tworzenia i uruchomienia konfiguracji Data Guard, zawierając ustawienia Redo Transport Service i Log Apply Services.
-					   -Zarzadzanie całą konfiguracją Data Guarda z kążdego systemu w konfiguracji.
-					   -Ulatwienie switchovers i failovers poprzez pozwalanie na uruchomienie ich za pomocą jednego przycisku w Oracle Enterprise Manager albo jednego polecenia
-					   w interfejsie DGMGRL command line
-					    - Pozwala na automatyczny szybki start failovera kiedy glowna baza danych jest niedostępna. Kiedy szybki start failovera jest wlączony Data Guard
-					    broker wyznacza jesli failover jest wymagany i inicjalizuje failover dla sprecyzowanej zapasowej bazy danych automatycznie przez co nie ryzykuje strata danych.
+					<aside class="notes">
+						Możemy wykorzystywać albo graficzny interfejs Oracle Enterprise Manager albo command line Data Guarda do
+					    -Tworzenia i uruchomienia konfiguracji Data Guard, zawierając ustawienia Redo Transport Service i Log Apply Services.
+						-Zarzadzanie całą konfiguracją Data Guarda z kążdego systemu w konfiguracji.
+					    -Ulatwienie switchovers i failovers poprzez pozwalanie na uruchomienie ich za pomocą jednego przycisku w Oracle Enterprise Manager 
+						 albo jednego polecenia w interfejsie DGMGRL command line
+					    -Pozwala na automatyczny szybki start failovera kiedy glowna baza danych jest niedostępna. Kiedy szybki start failovera jest wlączony Data Guard
+					    broker wyznacza jesli failover jest wymagany i inicjalizuje failover dla sprecyzowanej zapasowej bazy danych automatycznie
+						przez co nie ryzykuje strata danych.
 					  </aside>
 					Dodatkowo , Oracle Enterprise Manager automatyzuje i upraszcza
 					<ul>
 						<li>Tworzenie fizycznych i logicznych zapasowych baz danych z kopii backupu glownej bazy danych</li>
 						<li>Dodawanie nowych albo istniejacych zapasowych baz danych do istniejacej konfiguracji Data Guarda</li>
 						<li>Monitorowanie statystycznych danych, wychwytywanie informacji diagnostycznych i
-							szybkie wyszukiwanie problemow z centralizowanym monitorowaniem, testowaniem i narzedziami wydajnosciowymi. </li>
+							szybkie wyszukiwanie problemow z centralizowanym monitorowaniem, testowaniem i narzedziami wydajnośćiowymi. </li>
 					</ul>
 				</section>
 
 				<section>
 					<h2>Data Guard Protection Modes</h2>
-					<aside class="notes">W niektorych sytuacjach biznes nie moze sobie pozwolic na jakakolwiek utrate danych. W innych przypadkach dostepnosc bazy danych
-					jest waniejsza od utraty danych. Niektore aplikacje wymagaja maksymalnej wydajnosci i moga tolerowac male utraty danych. teraz opiszemy 3 podstawowe
-					tryby zabezpieczenia danych
-					MP - Zeby dostarczyc taki poziom zabezpieczenia redo data potrzebne do odtworzenia kazdej transakcji musza byc zapisane do obu - loklanych online redo legow i do zapasowych redo logow
+					<aside class="notes">
+						W niektorych sytuacjach biznes nie moze sobie pozwolic na jakakolwiek utrate danych. W innych przypadkach dostepnosc bazy danych
+						jest waniejsza od utraty danych. Niektore aplikacje wymagaja maksymalnej wydajnośći i moga tolerowac male utraty danych. 
+						
+						MP - Zeby dostarczyc taki poziom zabezpieczenia redo data potrzebne do odtworzenia kazdej transakcji musza 
+						byc zapisane do obu - loklanych online redo legow i do zapasowych redo logow
 						na prynajmniej jednej zapasowej bazie danych przed tym jak transakcja bedzie skomitowana.
-						Zeby upewnic sie ze utrata danych nie nastapi glowna baza wylacza sie jesli usterka nie pozwala na zapisanie redo streama do zapasowych redo logow w co najmniej jednej transakcyjnie spojnej zapasowej bazy danych,</li>
-					MA - Podobnie do maximum protectin mode  transakcja nie bedzie skomitowana dopoki redo potrzebne do przywracania tej transakcji nie bedzie zapisane do lokalnych online redo logow
-						i do zapasowych redo logow na co najmniej jednej transakcyjnie spojnej zapasowej bazie danych.W odroznieniu od maximum protection mode glowna baza nie wylaczy sie jesli usterka
-						nie pozwala na zapisanie redo streama do zapasowych redo logow. Natomiast, glowna baza danych operuje w maximum performance mode  dopoki usterka nie bedzie naprawiona i wszystkie luki
-						w redo logach nie beda naprawione. Kiedy wszystkie luki beda naprawione glowna baza danych automatycznie wznowia dzialanie w maximum availability mode.
+						Zeby upewnic sie ze utrata danych nie nastapi glowna baza wyłącza się jeśli usterka nie 
+						pozwala na zapisanie redo streama do zapasowych redo logow w co najmniej jednej transakcyjnie spojnej zapasowej bazy danych,
+						
+						MA - Podobnie do maximum protectin mode  transakcja nie bedzie akceptowana dopóoki redo potrzebne do przywracania tej transakcji
+						nie bedzie zapisane do lokalnych online redo logow i do zapasowych redo logow na co najmniej jednej transakcyjnie spojnej zapasowej
+						bazie danych.W odroznieniu od maximum protection mode glowna baza nie wylaczy sie jesli usterka
+						nie pozwala na zapisanie redo streama do zapasowych redo logow. Natomiast, glowna baza danych operuje 
+						w maximum performance mode  dopoki usterka nie bedzie naprawiona i wszystkie luki
+						w redo logach nie beda naprawione. Kiedy wszystkie luki beda naprawione glowna baza danych automatycznie wznowia 
+						dzialanie w maximum availability mode.
 
-						Ten mode zapewnia ze dane nie zostna utracone jesli glowna baza danych zawiedzie, ale tylko jesli usterka nie przeszkodzi wyslaniu wszystkich redo logow od glownej bazy do chociazby jednej zapasowej bazy danych.
-					MP -  To jest realizowane poprzez pozwolenie transakcjom na komitowanie natychmiast po tym jak redo data potrzebne do odzyskania tej transakcji sa zapisane na chociazby jednej zapasowej nazie danych
-						, ale ten redo stream jest zapisywany asynchronicznie z poszanowaniem dla transakcji ktora stworzyla redo data.
+						Ten mode zapewnia ze dane nie zostna utracone jesli glowna baza danych zawiedzie, 
+						ale tylko jesli usterka nie przeszkodzi wyslaniu wszystkich redo logow od glownej bazy do chociazby jednej zapasowej bazy danych.
+						
+						MP - To jest realizowane poprzez pozwolenie transakcjom na akceptowanie natychmiast po tym jak redo data potrzebne 
+						do odzyskania tej transakcji sa zapisane na chociazby jednej zapasowej nazie danych, ale ten redo stream jest zapisywany 
+						synchronicznie z poszanowaniem dla transakcji która stworzyła redo data.
 
-						Kiedy bazy sa polaczone siecia z wystarczajaca przepustowscia ten mod zapewnia poziom ochrony podobny do Maximum availability z minimalnym wplywem na
-						wydajnosc glownej bazy danych.
+						Kiedy bazy sa połączone siecią z wystarczajacą przepustowscią ten mod zapewnia poziom ochrony podobny do Maximum availability
+						z minimalnym wplywem na wydajność glownej bazy danych.
 					</aside>
 					<ul>
 						<li>Maximum protection - zapewnia ze zadne dane nie beda stracone nawet jesli glowna baza zawiedzie.</li>
-						<li>Maximum availability - protection mode ktory dostarcza najwyzszy poziom ochrony danych ktory jest mozliwy bez zagrożenia dostepnosci glownej bazy danych.</li>
+						<li>Maximum availability - protection mode który dostarcza najwyższy poziom ochrony danych który jest możliwy 
+							bez zagrożenia dostepności glównej bazy danych.</li>
 						<li>
-							Maximum performance - ten mode(domyslny) udostepnia najwyzszy poziom zabezpieczenia danych ktory jest mozliwy bez wplywu na wydajnosc
-							glownej bazy danych.
+							Maximum performance - ten mode(domyślny) udostępnia najwyższy poziom zabezpieczenia danych który jest możliwy bez wpływu na wydajność
+							glównej bazy danych.
 						</li>
 					</ul>
 				</section>
@@ -325,88 +344,24 @@
 					<h3>Benefity</h3>
 					<ul>
 						<li>Odzyskiwanie danych po awarii, ochrona danych i wysoka dostępność</li>
-						<aside class="notes">
-						Data Guard dostarcza efektywne i dogłębne odzyskiwanie danych po awarii z rozwiązaniami wysoko dostępnymi.
-						Łatwe do zarządzania 'switchover' i 'failover' możliwości pozwalające odwracanie ról
-						pomiedzy główną a zapasową bazą danych,
-						minimalizując czas przestoju głównej bazy dla plannowanych i nieplannowanych przerw.
-						</aside>
-						<li>Kompletna ochrona danych</li>
-						<aside class="notes">
-						Data Guard can ensure no data loss, even in the face of unforeseen disasters.
-						A standby database provides a safeguard against data corruption and user errors.
-						Storage level physical corruptions on the primary database do not propagate to the standby database.
-						Similarly, logical corruptions or user errors that cause the primary database to be permanently
-						damaged can be resolved.
-						Finally, the redo data is validated when it is applied to the standby database.
-						</aside>
-						<li>Wydajne użycie systemowych zasobów</li>
-						<aside class="notes">
-						The standby database tables that are updated with redo data received from the primary database
-						can be used for other tasks such as backups, reporting, summations, and queries,
-						thereby reducing the primary database workload necessary to perform these tasks, saving
-						valuable CPU and I/O cycles. With a logical standby database, users can perform normal data
-						manipulation on tables in schemas that are not updated from the primary database.
-						A logical standby database can remain open while the tables are updated from the primary database,
-						and the tables are simultaneously available for read-only access. Finally, additional indexes
-						and materialized views
-						can be created on the maintained tables for better query performance and to suit specific business requirements.
-						</aside>
-						<li>Elastycznosc w ochronie danych w równowadze między dostępnością przeciwko wymaganiami wydajnościowymi.</li>
-						<aside class="notes">
-						Oracle Data Guard offers maximum protection, maximum availability, and maximum performance modes to
-						help enterprises balance data availability against system performance requirements.
-						</aside>
-						<li>Automatyczne wykrywanie usterek i ich usuwanie</li>
-						<aside class="notes">
-							If connectivity is lost between the primary and one or more standby databases
-						(for example, due to network problems), redo data being generated on
-						the primary database cannot be sent to those standby databases.
-						Once a connection is reestablished, the missing archived redo log files (referred to as a gap)
-						are automatically detected by Data Guard, which then automatically transmits
-						the missing archived redo log files to the standby databases.
-						The standby databases are synchronized with the primary database, without manual intervention by the DBA.
 
-							</aside>
+						<li>Kompletna ochrona danych</li>
+
+						<li>Wydajne użycie systemowych zasobów</li>
+
+						<li>Elastycznosc w ochronie danych w równowadze między dostępnością przeciwko wymaganiami wydajnościowymi.</li>
+
+						<li>Automatyczne wykrywanie usterek i ich usuwanie</li>
+
 						<li>Scentralizowane i proste zarządzanie</li>
-						<aside class="notes">
-							The Data Guard broker provides a graphical user interface and a command-line
-						interface to automate management and operational tasks across multiple databases in a Data Guard configuration.
-						The broker also monitors all of the systems within a single Data Guard configuration.
-							</aside>
+
 						<li>Integracja z Oracle Database</li>
-						<aside class="notes">
-							Data Guard is a feature of Oracle Database Enterprise Edition and does not require separate installation.
-							</aside>
+
 						<li>Automatyczna zmiana ról</li>
-						<aside class="notes">
-							When fast-start failover is enabled, the Data Guard broker automatically fails over to a synchronized
-						standby site in the event of a disaster at the primary site,
-						requiring no intervention by the DBA. In addition, applications
-						are automatically notified of the role transition.
-							</aside>
+
 					</ul>
 				</section>
-
-				<section>
-					<h1>Zarządzanie Data Guard</h1>
-				</section>
-
-				<section>
-					<h2>Data Guard Broker</h2>
-					<aside class="notes">
-						Data Guard broker jest frameworkiem do zarządzania, który automatyzuje tworzenie, utrzymywanie i monitorowanie konfiguracji Data Guarda.
-						Do wyboru mamy wersje Oracle Enterprise Manager (GUI) lub konsolową.
-						Co możemy dzieki temu zrobic:
-							- stworzyć konfiguracje Data Guarda, właczajac w to ustawienie redo transport services i log apply services
-							- zarządzać całą konfiguracją Data Guarda z jakiegokolwiek systemu w konfiguracji.
-						    - upraszcza tworzenie fizycznej i logicznej kopii z backup copy głownej bazy
-						    - dodawanie kolejnych kopii zapasowych bazy do konfiguracji
-							- monitorowanie wyników log apply, wyłapywanie informacji diagnostycznych i szybsze odnajdywanie problemów
-
-					</aside>
-				</section>
-
+                
 				<section>
 					<h1>Proces konfiguracji:</h1>
 					<h3>1 primary database, 1 Physical Standby database</h3>
@@ -415,8 +370,8 @@
 
 					<p>Istotne:</p>
 					<ul>
-						<li>Oracle SID/Global_name - taki samy na wszystkich instancjach</li>
-						<li>Oracle db_unique_name - kazda baza ma unikalny</li>
+						<li>Oracle SID/Global_name - taki sam na wszystkich instancjach</li>
+						<li>Oracle db_unique_name - każda baza ma unikalny</li>
 					</ul>
 
 					<p>Inne:</p>
@@ -467,15 +422,19 @@ SQL> show parameter LOG_ARCHIVE_CONFIG</code></pre>
 						<pre><code data-trim>SQL> ALTER SYSTEM SET LOG_ARCHIVE_DEST_2='SERVICE=RTSDR NOAFFIRM ASYNC
 VALID_FOR=(ONLINE_LOGFILES,PRIMARY_ROLE) DB_UNIQUE_NAME=RTSDR';</code></pre>
 						<aside class="notes">
-						Kazdy log_archive_dest musi zawierac atrybut location lub service, który precyzuje lokacje na dysku lub zdalnie dostępna baze.
+						Kazdy log_archive_dest musi zawierac atrybut location lub service,
+                            który precyzuje lokacje na dysku lub zdalnie dostępna baze.
 							(Wszystkie inne atrybuty sa opcjonalne)
+
 							ANALIZA ATRYBUTOW:
 							- NOAFFIRM/AFFRIRM - kontrolują czy miejsce docelowane redo transportu uznaje pozyskane redo data przed czy po zapisaniem ich do redo logow kopi zapasowej
 							Na ogół noAffirm jest powiazane z ASYNC czyli asynchronicznym sposobem wysylania redo data. A Affirm z SYNC
-							- VALID FOR - prezycuje czy redo data zostaną zapisane, na podstawie dwóch czynników:
+
+                            - VALID FOR - prezycuje czy redo data zostaną zapisane, na podstawie dwóch czynników:
 								- czy baza jest aktualnie działająca jako głowna czy zapasowa
 							    - czy online redo logi, zapasowe redo logi, badz obydwa są aktualnie zarchiwizowane w tej lokacji.
-							- INNE PRZYKLADOWE:
+
+                            - INNE PRZYKLADOWE:
 								- ALTERNATE - prezycuje alternatywne lokacje archiwizacji, uzywane gdy orginalna ulegnie problemom.
 							    - COMPRESSION - uzywane gdy redo data są wysyłane w formie skompresowanej
 							    - DELAY - okresla time lag pomiedzy kiedy redo data są archiwizowane po stronie kopi zapasowen i kiedy zarchiwizowane redo logi są stosowane na zapasowej bazie danych
