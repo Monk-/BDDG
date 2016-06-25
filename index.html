@@ -50,7 +50,7 @@
 					<ol>
 						<li>Dostępność</li>
 						<li>Ochronę danych </li>
-						<aside class="notes">przeciwko data corruption</aside>
+						<aside class="notes">Przeciwko data corruption</aside>
 						<li>Odzyskiwanie danych</li>
 					</ol>
 					<br>
@@ -66,17 +66,17 @@
 						<p>Konfiguracja Data Guard składa się z : </p>
 						<ul>
 							<li>
-							 <b>primary</b> (głównej) baz
+							 <b>primary</b> (głównej) bazy
 							</li>
 							<li>
-								Od jednej do dziewięciu <b>standby</b>(zapasowej) bazy.
-								<aside class="notes">Conajmniej jednej!!!!</aside>
+								Od jednej do dziewięciu <b>standby</b>(zapasowych) baz.
+								<aside class="notes">Co najmniej jednej!!!!</aside>
 							</li>
 							<li>
 								Fizycznego systemu który hostuje główną i zapasowe bazy
 							</li>
 							<li>
-								Konfiguracje sieci Oracle Net Services
+								Konfiguracji sieci Oracle Net Services
 							</li>
 							<li>
 								Redo Transport services
@@ -94,13 +94,11 @@
 							<aside class="notes">
 						Nie ma żadnych ograniczeń na to gdzie znajdują się bazy, jedyne wymaganie to żeby bazy mogły się lączyć między sobą.
 							Na przykłąd:
-								Można mieć jedną standby(zapasową) bazę i główną na tych samych systemach,
+								Można mieć jedną standby(zapasową) bazę i główną na tym samym systemie,
 								a dwię inne instancje zapasowych na innych systemach w kompletnie innnych geograficznych lokacjach
 
-						Zarówną główną jak i zapasowymi bazami danych
-						 można zarządzać poprzez SQL command line
-						 lub Data Guards broker interface,
-						 albo UI zintegrowan z Oracle Enterprise Manager.
+						Zarówno główną jak i zapasowymi bazami danych można zarządzać poprzez SQL command line
+								lub Data Guards broker interface, albo UI zintegrowane z Oracle Enterprise Manager.
 						</aside>
 						</p>
 					</section>
@@ -109,7 +107,7 @@
 					<h2 style="color:#B2DFDB">Primary Database</h2>
 					<p> Konfiguracja Data Guard zawiera jedną produkcyjną bazę danych, lub odwołuje się do bazy danych, która funkcjonuje jako primary.
 
-						<aside class="notes">W przypadku gdy główna baza danych zostanie niedostępna  z powodu planowanej lub nieplanowanej przerwy.
+						<aside class="notes">W przypadku gdy główna baza danych będzie niedostępna  z powodu planowanej lub nieplanowanej przerwy.
 						Data Guard może zamienić każdą standby database w rolę głównej, minimalizując czas niedostępności powiązanej z przerwą.
 							</aside>
 					</p>
@@ -121,7 +119,7 @@
 
 						<aside class="notes">
 						Spójność tranzakcyjna (Transactionally Consistent) - znaczy że istnieje snapshot bazy w punkcie czasu
-						który zapewnia że wszystkoe scommitowane tranzakcje mają swoje odzwierciedlenie w bazie a nie scommitowane tranzakcje nie mają
+						który zapewnia że wszystkie zatwierdzone tranzakcje mają swoje odzwierciedlenie w bazie, a nie zatwierdzone tranzakcje nie mają
 
 
 
@@ -143,7 +141,7 @@
 				</section>
 
 				<section>
-					<h2 style="color:#95cde7">Zapasowa baza danych moze być zarówną fizyczną kopią bazy jak i logiczną</h2>
+					<h2 style="color:#95cde7">Zapasowa baza danych moze być zarówno fizyczną kopią bazy jak i logiczną</h2>
 					<ul>
 						<li><h3>Fizyczna zapasowa baza danych</h3></li>
 						<p>
@@ -154,11 +152,10 @@
 							Fizyczna kopia bazy jest synchronizowana z głowną bazą, poprzez <b>'Redo Apply'</b>
 						</p>
 						<aside class="notes">
-						Schemat bazy, włączając w to indeksy są te same. Fizyczna kopia bazy jest synchronizowana
+						Schemat bazy, włączając w to indeksy jest taki sam. Fizyczna kopia bazy jest synchronizowana
 						z głowną bazą, poprzez 'Redo Apply', które przywraca redo data otrzymane z głownej bazy
-						i zastosowywuje the redo do fizycznej zapasowej bazy danych.
+						i zastosowywuje redo do fizycznej zapasowej bazy danych.
 
-						Fizyczne kopie bazy mogą być uzywane w celach biznesowych innych niż zapobieganie utraty danych. (???)
 						</aside>
 						<li><h3>Logiczna zapasowa baza danych</h3></li>
 						<p>
@@ -171,8 +168,8 @@
 							</aside>
 						</p>
 						<aside class="notes">
-						Logiczna kopia bazy może być użyta w innych biznesowych celach jako dodatek, Co pozwala użytkownikowi na dostęp do zapytań z zapasowej bazy.
-						Co więcej, używająć logicznej kopi , można upgradowac Oracle Database software i patchowac z praktycznie zerowym czasem przestoju.
+						Logiczna kopia bazy może być użyta w innych biznesowych celach jako dodatek, co pozwala użytkownikowi na dostęp do zapytań z zapasowej bazy.
+						Co więcej, używająć logicznej kopi, można upgradowac Oracle Database software i patchowac z praktycznie zerowym czasem przestoju.
 						Logiczne kopie można używać równoczesnie do ochrony danych, reportowania i upgradów bazy.
 						</aside>
 					</ul>
@@ -216,13 +213,13 @@
 				<section>
 					<h2><a style="color:#95cde7">Redo Transport Services</a></h2>
 					<p>
-						kontroluje automatyczny transfer redo data z produkcyjnej bazy danych do jednego lub więcej instancji archiwizujacych.
+						kontroluje automatyczny transfer redo data z produkcyjnej bazy danych do jednej lub więcej instancji archiwizujacych.
 					</p>
 					<h3>Zadania</h3>
 					<aside class="notes"> Redo Transport Services wykonuje poniższe zadania: </aside>
 					<ul>
 						<li>Transport redo data z głownej bazy do kopi zapasowych w konfiguracji.</li>
-						<li>Rozwiązywanie problemów powstałych wobez luk w redo logach spowodowanych awarią.</li>
+						<li>Rozwiązywanie problemów powstałych wobec luk w redo logach spowodowanych awarią.</li>
 						<li>Wdrążanie modów zabezpieczenia bazy</li>
 						<li>Automatyczne wynajdywanie brakujących lub uszkodzonych zarchiwizowanych redo logów
 							na zapasowym systemie i automatyczne zastępowanie zarchiwizowanych redo logów z innych baz danych </li>
@@ -235,10 +232,10 @@
 					<p>
 						Zastosowywuje redo data na zapasowych kopiach bazy danych do podtrzymania tranzakcyjnej synchronizacji z główną bazą danych.
 					</p>
-					<aside class="notes">  Główną różnicą pomiędzy fizyczną i logiczną kopią zapasową bazy danych jest sposób w jaki
+					<aside class="notes"> Główną różnicą pomiędzy fizyczną i logiczną kopią zapasową bazy danych jest sposób w jaki
 						log apply services zastosowywuje zarchiwizowane redo logi
 
-						Dla fizyczne kopie baz danych - Data Guard uzywa Redo Apply które zastosowywike redo data
+						Dla fizycznej kopie baz danych - Data Guard uzywa Redo Apply które zastosowywike redo data
 						na zapasową baze uzywajac standardowegej techniki przywracania w Oraclowych bazach
 
 
@@ -265,7 +262,7 @@
 								Failover jest gdy głowna baza jest niedostepna.
 								<aside class="notes">
 									Failover jest dokonywany tylko wtedy gdy zaistnieje sytuacja katastroficznego błedu głownej bazy
-									i wynikiem failoveru jest przeniesienie kopi bazy do roli głownej. Wtedy administrator bazy może skonfigurować Data Guardsa żeby zapewnić brak utraty danych.
+									i wynikiem failoveru jest przeniesienie kopii bazy do roli głownej. Wtedy administrator bazy może skonfigurować Data Guard żeby zapewnić brak utraty danych.
 
 									Przenoszenie ról opisane powyżej są wykonywane poprzez ręczne użycie SQL statements.
 								</aside>
@@ -286,8 +283,8 @@
 					  </aside>
 					Dodatkowo , Oracle Enterprise Manager automatyzuje i upraszcza
 					<ul>
-						<li>Tworzyc fizyczne i logiczne zapasowe bazy danych z kopii backupu glownej bazy danych</li>
-						<li>Dodawac nowe albo istniejace zapasowe bazy danych do istniejacej konfiguracji Data Guarda</li>
+						<li>Tworzenie fizycznych i logicznych zapasowych baz danych z kopii backupu glownej bazy danych</li>
+						<li>Dodawanie nowych albo istniejacych zapasowych baz danych do istniejacej konfiguracji Data Guarda</li>
 						<li>Monitorowanie statystycznych danych, wychwytywanie informacji diagnostycznych i
 							szybkie wyszukiwanie problemow z centralizowanym monitorowaniem, testowaniem i narzedziami wydajnosciowymi. </li>
 					</ul>
@@ -315,7 +312,7 @@
 					</aside>
 					<ul>
 						<li>Maximum protection - zapewnia ze zadne dane nie beda stracone nawet jesli glowna baza zawiedzie.</li>
-						<li>Maximum availability - protetion mode ktory dostarcza najwyzszy poziom ochrony danych ktory jest mozliwy bez kompromitowania dostepnosci glownej bazy danych.</li>
+						<li>Maximum availability - protection mode ktory dostarcza najwyzszy poziom ochrony danych ktory jest mozliwy bez zagrożenia dostepnosci glownej bazy danych.</li>
 						<li>
 							Maximum performance - ten mode(domyslny) udostepnia najwyzszy poziom zabezpieczenia danych ktory jest mozliwy bez wplywu na wydajnosc
 							glownej bazy danych.
@@ -329,8 +326,8 @@
 					<ul>
 						<li>Odzyskiwanie danych po awarii, ochrona danych i wysoka dostępność</li>
 						<aside class="notes">
-						Data Guard dostarcza efektywne i dołębne odzyskiwaniedanych po awarii z rozwiązaniami wysoko dostępnymi.
-						łatwe do zarządzania 'switchover' i 'failover' możliwości pozwalające odwracanie ról
+						Data Guard dostarcza efektywne i dogłębne odzyskiwanie danych po awarii z rozwiązaniami wysoko dostępnymi.
+						Łatwe do zarządzania 'switchover' i 'failover' możliwości pozwalające odwracanie ról
 						pomiedzy główną a zapasową bazą danych,
 						minimalizując czas przestoju głównej bazy dla plannowanych i nieplannowanych przerw.
 						</aside>
@@ -568,35 +565,6 @@ RMAN> backup database plus archivelog;</code></pre>
 
 						<li> Tworzenie spfile z pfile</li>
 						<pre><code data-trim>SQL> create spfile from pfile='oracle/product/10.2.0/db_1/dbs/initRTS.ora';</code></pre>
-
-
-						<li>Wystartowanie listenera na zapasowej isntancji</li>
-						<pre><code data-trim>> lsnrctl start</code></pre>
-
-						<li>Odwtwórz i przywróc baze danych z RMAN backup utility</li>
-						<pre><code data-trim>RMAN> list backup of database summary;
-RMAN> restore database;
-RMAN> recover database;</code></pre>
-
-						<li>Stworzenie plików standby redolog</li>
-						<pre><code data-trim>SQL> sqlplus / as sysdba
-SQL> ALTER SYSTEM SET STANDBY_FILE_MANAGEMENT='MANUAL' scope=spfile;
-SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby1.log') size 51M;
-SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby2.log') size 51M;
-SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby3.log') size 51M;
-SQL> ALTER DATABASE ADD STANDBY LOGFILE('/oracle/oradata/RTS/stndby4.log') size 51M;
-SQL> ALTER SYSTEM SET STANDBY_FILE_MANAGEMENT='AUTO' scope=spfile;</code></pre>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Konfiguracja StandBy(Zapasowej) bazy</h2>
-
-					<p>Kroki:</p>
-					<ul>
-
-						<li>Wystartowanie procesu</li>
-						<pre><code data-trim>SQL> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE nodelay DISCONNECT FROM SESSION;</code></pre>
 
 
 						<li>Wystartowanie listenera na zapasowej isntancji</li>
